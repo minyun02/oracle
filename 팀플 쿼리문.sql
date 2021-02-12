@@ -26,8 +26,10 @@ select DISTINCT r.flightno 항공편면,r.brdDate 출발날짜, dep 출발지, depTime 출발
 on r.flightno=f.flightno where r.brdDate > to_char(sysdate,'YYYYMMDD') order by r.brddate;
 
 --2.1검색-> 텍스트필드 4개 중 1개만 입력되었을때.->완료
+
 select r.flightno 항공편면,r.brdDate 출발날짜, dep 출발지, depTime 출발시간, des 도착지, desTime 도착시간, flight_state 상태 from ac_flight f, ac_reservation r
 where r.brddate > to_date(20200201, 'YYYYMMDD') or f.flightno='' OR dep='' OR des='' order by r.brddate;
+
 --2.2출발날짜&항공편->완료
 select DISTINCT f.flightno 항공편면,r.brdDate 출발날짜, dep 출발지, depTime 출발시간, des 도착지, desTime 도착시간, flight_state 상태 from ac_flight f, ac_reservation r
 where r.brddate > to_date(20210201, 'YYYYMMDD') AND f.flightno='AC203' order by r.brddate;
@@ -52,9 +54,11 @@ where f.flightno='AC203' AND dep='PUS' AND des='CJU' AND r.brddate > to_date(202
 
 
 --3.지연상태 수정
-update ac_flight set depTime='1200', desTime='1300', flight_state='NORMAL' where flightNo='AC203';
+update ac_flight set depTime='1200', desTime='1300', flight_state='NOMAL' where flightNo='AC203';
 
-update ac_flight f, ac_reservation r set f.depTime='1234', f.desTime='1234', 
+--update ac_flight f, ac_reservation r set f.depTime='1234', f.desTime='1234', 
+
+
 
 
 
@@ -74,13 +78,26 @@ where flightno=(select distinct flightno from ac_reservation where brddate=to_da
 select * from ac_flight where flightno='AC203';----------0212 새벽에 여기까지함
 
 
+---항공편 추가
+--1.1 ac_aircraft에서 regno 출력--콤보박스에 넣을용도
+select regNo from ac_aircraft;
+--1.2 ac_flight에서 flgithno 출력 --항공편명 중복확인 용도
+select flightno from ac_flight where flightno='AC203';
+--1.3 ac_flight에서 dep 출력 --출발지 도착지 콤보박스 세팅용
+select distinct dep, crew from ac_flight order by dep;
+--1.4 dep, dep도시
+select dep_city, dep_airport from ac_dep where dep='PUS';
+--1.5 ac_flight에서 dep, des 출력 --신 항공편 출발지 도착지 중복확인용
+select dep, des from ac_flight where dep='PUS' AND des='CJU' order by dep;
+--1.6 출발지에따른 운임
+select fare, dep, des from ac_flight order by dep;
+--1.7 항공편 추가
+insert into ac_flight(regno, flightno, dep, des, deptime, destime, fare) 
+values('HL9056', '123', 'BKK', 'BCN', '0800', '1800', 850000);
 
-select * from ac_reservation where flightno='AC203' AND brdDate=to_char(TO_DATE(20210215, 'YYYYMMDD'));		
+select * from ac_aircraft order by regno;
 
-select * from ac_reservation where user_passno='M234784' order by brddate;
- 
-select * from ac_flight where flightno='AC203';
+select * from ac_flight;
 
-select r.flightno, f.dep, r.brddate from ac_reservation r, ac_flight f where r.brddate=to_char(TO_DATE('20210215', 'YYYYMMDD')) AND f.dep='PUS';
 rollback;
 commit;
