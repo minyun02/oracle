@@ -4,17 +4,33 @@ select r.resNo as 예약번호, r.brdDate as 출발일시, r.flightNo as 항공편명, d1.de
 from ac_reservation r, ac_dep d1, ac_flight f, ac_des d2
 where (select u.user_passNo from ac_user u where u.user_name='이지수')=r.user_passNo AND r.flightNo=f.flightNo AND f.dep=d1.dep AND f.des=d2.des order by r.brddate;
 
---CustomBookingChange3
---table1
+--CustomBookingChnage2
+--1.1
+select dep,des, depTime, desTime, flightTime, flightNo, flight_state, fare  from ac_flight where dep='BKK' AND des='ICN' order by depTime;
 
---table2
+--CustomBookingChange3
+--table1--출발지, 도착지, 출발일, 도착일(필요없음), 출발시간, 도착시간, 항공편명, 좌석, 운임
+--
+select dep, des, brddate, deptime, destime, r.flightno, seatno, fare from ac_flight f, ac_reservation r, ac_seat s
+where f.flightno='AC565' AND r.resno='E54R06' AND s.resno='E54R06' order by seatno;
+
+select * from ac_flight where dep='BKK';
+
+--table2--성명한, 성명영, 여권번호, 여권만료일, 발행국가, 생년월일, 연락처, 이메일
 --예약번호의 예약자 정보
 select user_name, user_ename, r.user_passno, r.user_exdate, user_nation, user_birth, user_tel, user_email
-from ac_user u join ac_reservation r on u.user_passno=r.user_passno where r.resno='Y13SD4'
+from ac_user u join ac_reservation r on u.user_passno=r.user_passno where r.resno='E54R06'
 union all
 select com_name, com_ename, com_passno, com_exdate, com_nation, com_birth, com_tel, com_email
-from ac_company where resno='Y13SD4';--예약번호는 변수를 통해서 받아야와야한다.
---table3
+from ac_company where resno='E54R06';--예약번호는 변수를 통해서 받아야와야한다.
+
+--table3--변경전, 변경후, 결제예정금액
+select fare, flightno from ac_flight where flightno='AC563'
+union all
+select fare, flightno from ac_flight where flightno='AC565';
+
+select flightno, fare from ac_flight where flightno in('AC563', 'AC565');
+s
 
 
 --항공편조회/수정
@@ -101,3 +117,13 @@ select * from ac_flight;
 
 rollback;
 commit;
+
+
+
+
+
+
+
+
+
+
