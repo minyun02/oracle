@@ -25,14 +25,34 @@ select com_name, com_ename, com_passno, com_exdate, com_nation, com_birth, com_t
 from ac_company where resno='E54R06';--예약번호는 변수를 통해서 받아야와야한다.
 
 --table3--변경전, 변경후, 결제예정금액
-select fare, flightno from ac_flight where flightno='AC563'
-union all
-select fare, flightno from ac_flight where flightno='AC565';
+select flightno, fare from (select flightno, fare, LAG(flightno) over (order by flightno) 모르겠다, LAG(fare) over (order by fare) 음 
+from ac_flight where flightno in('AC562', 'AC570') 
+order by flightno ) where flightno in('AC562' , 'AC570');
 
-select flightno, fare from ac_flight where flightno in('AC563', 'AC565');
-s
+select flightno, fare from (select flightno, fare, LAG(flightno) over (order by flightno) 모르겠다, LAG(fare) over (order by fare) 음 
+from ac_flight where flightno in('AC563', 'AC569') 
+order by flightno ) where flightno in('AC563' , 'AC569');
+
+--결제창에서 업데이트 --변경전항공 AC563 , 변경 후 AC573, 예약번호 E54R06
+update ac_reservation set flightno='AC563' where resno='E54R06';
+select flightNo from ac_reservation where resno='E54R06';
+select * from user_constraints;
+--결제창에서 마일리지 업데이트 --업데이트 전=2214
+select mileage from ac_user where user_passno='M653575';
+
+update ac_user set mileage=2214 where user_passno='M653575';
+rollback;
+commit;
 
 
+--CustomBookingChange4 --예약날짜 업데이트하기--20201116
+update ac_reservation set res_date=to_date(20201116, 'YYYYMMDD') where resno='E54R06';
+
+select res_date from ac_reservation where resno='E54R06';
+
+
+
+select * from ac_seat;
 --항공편조회/수정
 --1.항공편 전체 출력(항공편명, 출발지, 출발시간, 도착지, 도착시간)
 select r.flightno 항공편면,r.brdDate 출발날짜, dep 출발지, depTime 출발시간, des 도착지, desTime 도착시간, flight_state 상태 from ac_reservation r join ac_flight f
@@ -71,7 +91,7 @@ where f.flightno='AC203' AND dep='PUS' AND des='CJU' AND r.brddate > to_date(202
 
 --3.지연상태 수정
 update ac_flight set depTime='1200', desTime='1300', flight_state='NOMAL' where flightNo='AC203';
-
+select flight_state from ac_flight where flightno='AC203';
 --update ac_flight f, ac_reservation r set f.depTime='1234', f.desTime='1234', 
 
 
