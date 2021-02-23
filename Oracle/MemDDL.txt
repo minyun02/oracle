@@ -1,0 +1,49 @@
+/* Emp */
+CREATE TABLE TABLE (
+	emp_no NUMBER(5) NOT NULL, /*  사원번호 */
+	name VARCHAR2(100) NOT NULL, /* 이름 */
+	dept VARCHAR2(30), /* 부서 */
+	job VARCHAR2(30), /* 직급 */
+	gender CHAR(2) NOT NULL, /* 성별 */
+	start_date DATE, /* 입사일 */
+	resignation_date DATE /* 퇴사일 */
+);
+
+ALTER TABLE TABLE
+	ADD
+		CONSTRAINT PK_TABLE
+		PRIMARY KEY (
+			emp_no
+		);
+
+/* 새 테이블 */
+CREATE TABLE TABLE2 (
+);
+
+/* Dept */
+CREATE TABLE TABLE3 (
+	dept_no NUMBER(5) NOT NULL, /* 부서번호 */
+	dept_name VARCHAR2(30) NOT NULL, /* 부서명 */
+	dept_tel NUMBER(10) NOT NULL, /* 사내번호 */
+	dept_head VARCHAR2(100) /* 책임자 */
+);
+
+ALTER TABLE TABLE3
+	ADD
+		CONSTRAINT PK_TABLE3
+		PRIMARY KEY (
+			dept_no
+		);
+
+/* Job */
+CREATE TABLE TABLE4 (
+	job_no NUMBER(5) NOT NULL, /* 직급번호 */
+	job_class VARCHAR2(30) /* 직급명 */
+);
+
+ALTER TABLE TABLE4
+	ADD
+		CONSTRAINT PK_TABLE4
+		PRIMARY KEY (
+			job_no
+		);
